@@ -1,0 +1,12 @@
+{
+  "name": "edtech",
+  "private": true,
+  "workspaces": [
+    "edtech-landing-page-v2"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=edtech-landing-page-v2",
+    "build": "npm run build --workspace=edtech-landing-page-v2",
+    "start": "npm run start --workspace=edtech-landing-page-v2"
+  }
+}
