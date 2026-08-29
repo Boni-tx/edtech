@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { BookOpen, Star, ShieldCheck } from "lucide-react";
 import MagneticButton from "./MagneticButton";
@@ -14,6 +15,8 @@ const mockSession = {
 };
 
 export default function Hero() {
+  const router = useRouter();
+
   return (
     <section className="relative px-6 pt-28 pb-24 sm:pt-36 sm:pb-32 lg:px-8">
       {/* grid de fundo sutil */}
@@ -65,10 +68,16 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.24 }}
             className="mt-9 flex flex-col gap-3 sm:flex-row"
           >
-            <MagneticButton variant="primary">
+            <MagneticButton
+              variant="primary"
+              onClick={() => router.push("/login?tab=signup&role=aluno")}
+            >
               Encontrar um professor
             </MagneticButton>
-            <MagneticButton variant="secondary">
+            <MagneticButton
+              variant="secondary"
+              onClick={() => router.push("/login?tab=signup&role=professor")}
+            >
               Quero dar aulas
             </MagneticButton>
           </motion.div>

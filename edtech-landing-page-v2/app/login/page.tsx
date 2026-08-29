@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { Suspense, useState, type FormEvent } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, GraduationCap, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,9 +20,35 @@ import { cn } from "@/lib/utils";
 type Tab = "login" | "signup";
 type Role = "aluno" | "professor";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LENGTH = 6;
+
+type LoginErrors = Partial<Record<"email" | "password", string>>;
+type SignupErrors = Partial<
+  Record<"name" | "email" | "password" | "confirmPassword", string>
+>;
+
 export default function LoginPage() {
-  const [tab, setTab] = useState<Tab>("login");
-  const [role, setRole] = useState<Role>("aluno");
+  // useSearchParams precisa estar dentro de um Suspense boundary no App Router
+  return (
+    <Suspense fallback={null}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+function LoginPageContent() {
+  const searchParams = useSearchParams();
+
+  const initialTab: Tab = searchParams.get("tab") === "signup" ? "signup" : "login";
+  const initialRole: Role =
+    searchParams.get("role") === "professor" ? "professor" : "aluno";
+
+  const [tab, setTab] = useState<Tab>(initialTab);
+  const [role, setRole] = useState<Role>(initialRole);
+
+  const [loginErrors, setLoginErrors] = useState<LoginErrors>({});
+  const [signupErrors, setSignupErrors] = useState<SignupErrors>({});
 
   // --- Handlers vazios, prontos para conectar no Supabase depois ---
   const handleGoogleLogin = () => {};
@@ -29,10 +56,52 @@ export default function LoginPage() {
 
   const handleEmailLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const email = String(formData.get("email") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+
+    const errors: LoginErrors = {};
+    if (!EMAIL_REGEX.test(email)) {
+      errors.email = "Digite um email válido.";
+    }
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      errors.password = `A senha precisa ter pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`;
+    }
+
+    setLoginErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
+    // validação passou — aqui entra a chamada real ao Supabase depois
   };
 
   const handleEmailSignup = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const name = String(formData.get("name") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+    const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
+    const errors: SignupErrors = {};
+    if (name.length < 2) {
+      errors.name = "Digite seu nome completo.";
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      errors.email = "Digite um email válido.";
+    }
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      errors.password = `A senha precisa ter pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`;
+    }
+    if (confirmPassword !== password) {
+      errors.confirmPassword = "As senhas não coincidem.";
+    }
+
+    setSignupErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
+    // validação passou — aqui entra a chamada real ao Supabase depois (usando `role`)
   };
 
   return (
@@ -101,20 +170,24 @@ export default function LoginPage() {
 
                 <Divider label="ou entre com seu email" />
 
-                <form onSubmit={handleEmailLogin} className="space-y-4">
+                <form onSubmit={handleEmailLogin} noValidate className="space-y-4">
                   <div>
                     <Label htmlFor="login-email">Email</Label>
                     <div className="relative">
                       <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
                       <Input
                         id="login-email"
+                        name="email"
                         type="email"
                         autoComplete="email"
                         placeholder="voce@email.com"
-                        required
-                        className="pl-10"
+                        className={cn(
+                          "pl-10",
+                          loginErrors.email && "border-red-400 focus-visible:ring-red-200"
+                        )}
                       />
                     </div>
+                    {loginErrors.email && <FieldError message={loginErrors.email} />}
                   </div>
 
                   <div>
@@ -133,13 +206,17 @@ export default function LoginPage() {
                       <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
                       <Input
                         id="login-password"
+                        name="password"
                         type="password"
                         autoComplete="current-password"
                         placeholder="••••••••"
-                        required
-                        className="pl-10"
+                        className={cn(
+                          "pl-10",
+                          loginErrors.password && "border-red-400 focus-visible:ring-red-200"
+                        )}
                       />
                     </div>
+                    {loginErrors.password && <FieldError message={loginErrors.password} />}
                   </div>
 
                   <Button type="submit" size="lg" className="w-full">
@@ -181,20 +258,24 @@ export default function LoginPage() {
 
                 <Divider label="ou" />
 
-                <form onSubmit={handleEmailSignup} className="space-y-4">
+                <form onSubmit={handleEmailSignup} noValidate className="space-y-4">
                   <div>
                     <Label htmlFor="signup-name">Nome completo</Label>
                     <div className="relative">
                       <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
                       <Input
                         id="signup-name"
+                        name="name"
                         type="text"
                         autoComplete="name"
                         placeholder="Seu nome completo"
-                        required
-                        className="pl-10"
+                        className={cn(
+                          "pl-10",
+                          signupErrors.name && "border-red-400 focus-visible:ring-red-200"
+                        )}
                       />
                     </div>
+                    {signupErrors.name && <FieldError message={signupErrors.name} />}
                   </div>
 
                   <div>
@@ -203,13 +284,17 @@ export default function LoginPage() {
                       <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
                       <Input
                         id="signup-email"
+                        name="email"
                         type="email"
                         autoComplete="email"
                         placeholder="voce@email.com"
-                        required
-                        className="pl-10"
+                        className={cn(
+                          "pl-10",
+                          signupErrors.email && "border-red-400 focus-visible:ring-red-200"
+                        )}
                       />
                     </div>
+                    {signupErrors.email && <FieldError message={signupErrors.email} />}
                   </div>
 
                   <div>
@@ -218,13 +303,39 @@ export default function LoginPage() {
                       <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
                       <Input
                         id="signup-password"
+                        name="password"
                         type="password"
                         autoComplete="new-password"
-                        placeholder="Crie uma senha"
-                        required
-                        className="pl-10"
+                        placeholder="Mínimo de 6 caracteres"
+                        className={cn(
+                          "pl-10",
+                          signupErrors.password && "border-red-400 focus-visible:ring-red-200"
+                        )}
                       />
                     </div>
+                    {signupErrors.password && <FieldError message={signupErrors.password} />}
+                  </div>
+
+                  <div>
+                    <Label htmlFor="signup-confirm-password">Confirmar senha</Label>
+                    <div className="relative">
+                      <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
+                      <Input
+                        id="signup-confirm-password"
+                        name="confirmPassword"
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder="Repita a senha"
+                        className={cn(
+                          "pl-10",
+                          signupErrors.confirmPassword &&
+                            "border-red-400 focus-visible:ring-red-200"
+                        )}
+                      />
+                    </div>
+                    {signupErrors.confirmPassword && (
+                      <FieldError message={signupErrors.confirmPassword} />
+                    )}
                   </div>
 
                   <Button type="submit" size="lg" className="w-full">
@@ -260,6 +371,10 @@ function Divider({ label }: { label: string }) {
       <span className="h-px flex-1 bg-navy-900/8" />
     </div>
   );
+}
+
+function FieldError({ message }: { message: string }) {
+  return <p className="mt-1.5 text-xs font-medium text-red-500">{message}</p>;
 }
 
 function RoleButton({
