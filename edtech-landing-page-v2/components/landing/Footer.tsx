@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 // MOCK — links serão apontados para rotas reais quando existirem
 const links = [
   { label: "Sobre", href: "#" },
@@ -13,15 +11,9 @@ export default function Footer() {
   return (
     <footer className="border-t border-navy-900/8 px-6 py-10 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
-        <div className="flex flex-col items-center sm:items-start gap-4">
-          <Image
-            src="/logoedtech.png"
-            alt="EdTech Marketplace Logo"
-            width={120}
-            height={32}
-            className="h-8 w-auto object-contain"
-          />
-        </div>
+        <p className="text-sm font-semibold text-navy-900">
+          EdTech Marketplace
+        </p>
 
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
           {links.map((link) => (
