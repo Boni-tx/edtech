@@ -1,12 +1,32 @@
 {
-  "name": "edtech",
+  "name": "edtech-marketplace-landing",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "edtech-landing-page-v2"
-  ],
   "scripts": {
-    "dev": "npm run dev --workspace=edtech-landing-page-v2",
-    "build": "npm run build --workspace=edtech-landing-page-v2",
-    "start": "npm run start --workspace=edtech-landing-page-v2"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "framer-motion": "^11.2.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.3.0",
+    "lucide-react": "^0.383.0",
+    "class-variance-authority": "^0.7.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "@supabase/ssr": "^0.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.12.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.38",
+    "autoprefixer": "^10.4.19"
   }
 }
