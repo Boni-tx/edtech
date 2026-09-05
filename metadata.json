@@ -1,6 +1,0 @@
-{
-  "name": "EdTech Marketplace",
-  "description": "EdTech Marketplace landing page imported from GitHub.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
