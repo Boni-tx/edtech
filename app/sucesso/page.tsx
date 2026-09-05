@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import LogoutButton from "./logout-button";
 
 export default async function SucessoPage() {
@@ -34,6 +37,13 @@ export default async function SucessoPage() {
           Você está logado como{" "}
           <span className="font-medium text-navy-900">{user.email}</span>.
         </p>
+
+        <Link
+          href="/demo-aula"
+          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "mt-6 w-full")}
+        >
+          Ver demonstração de escrow (Solana devnet)
+        </Link>
 
         <LogoutButton />
       </div>
