@@ -424,8 +424,18 @@ function traduzErro(message: string): string {
     "Email not confirmed": "Confirme seu email antes de entrar.",
     "Password should be at least 6 characters":
       "A senha precisa ter pelo menos 6 caracteres.",
+    "Email address is invalid": "Digite um email válido.",
+    "email rate limit exceeded":
+      "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
+    "over_email_send_rate_limit":
+      "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
   };
-  return map[message] ?? message;
+  if (map[message]) return map[message];
+  if (/invalid/i.test(message)) return "Digite um email válido.";
+  if (/rate limit/i.test(message)) {
+    return "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.";
+  }
+  return "Não foi possível concluir. Tente novamente em instantes.";
 }
 
 function AuthMessage({ tone, message }: { tone: "error" | "notice"; message: string }) {
