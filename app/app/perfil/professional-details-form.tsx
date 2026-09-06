@@ -83,10 +83,10 @@ export default function ProfessionalDetailsForm({ initial }: { initial: Initial 
     <form
       id="dados-profissionais"
       onSubmit={handleSubmit}
-      className="scroll-mt-8 rounded-2xl border border-navy-900/8 bg-white p-6 shadow-card"
+      className="scroll-mt-8 rounded-2xl border border-navy-900/8 bg-white p-6 shadow-card dark:border-white/10 dark:bg-navy-900"
     >
-      <h3 className="mb-1 text-sm font-bold text-navy-900">Dados profissionais</h3>
-      <p className="mb-5 text-xs text-navy-500">
+      <h3 className="mb-1 text-sm font-bold text-navy-900 dark:text-white">Dados profissionais</h3>
+      <p className="mb-5 text-xs text-navy-500 dark:text-navy-300">
         Usados pra verificação de identidade e repasse dos pagamentos. Visíveis só pra você e pra
         equipe da plataforma.
       </p>

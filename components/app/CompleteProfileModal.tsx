@@ -21,22 +21,22 @@ export default function CompleteProfileModal({ show }: { show: boolean }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-card-hover"
+        className="relative w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-card-hover dark:bg-navy-900"
       >
         <button
           type="button"
           onClick={() => setDismissed(true)}
-          className="absolute right-4 top-4 text-navy-300 hover:text-navy-900"
+          className="absolute right-4 top-4 text-navy-300 hover:text-navy-900 dark:text-navy-500 dark:hover:text-white"
         >
           <X className="h-4 w-4" />
         </button>
 
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-navy-900/5">
-          <ClipboardList className="h-7 w-7 text-navy-900" />
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-navy-900/5 dark:bg-white/10">
+          <ClipboardList className="h-7 w-7 text-navy-900 dark:text-white" />
         </div>
 
-        <h2 className="text-lg font-bold text-navy-900">Complete seu perfil profissional</h2>
-        <p className="mt-2 text-sm text-navy-500">
+        <h2 className="text-lg font-bold text-navy-900 dark:text-white">Complete seu perfil profissional</h2>
+        <p className="mt-2 text-sm text-navy-500 dark:text-navy-300">
           Professores com perfil completo (CPF, endereço, dados bancários e verificação) aparecem
           mais nas buscas e passam mais confiança pros alunos.
         </p>

@@ -7,10 +7,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-navy-900 text-white hover:bg-navy-700",
-        outline: "border border-navy-900/15 bg-white text-navy-900 hover:bg-navy-50",
-        ghost: "text-navy-500 hover:bg-navy-50 hover:text-navy-900",
-        link: "text-navy-500 underline-offset-4 hover:text-navy-900 hover:underline",
+        default:
+          "bg-navy-900 text-white hover:bg-navy-700 dark:bg-white dark:text-navy-900 dark:hover:bg-navy-100",
+        outline:
+          "border border-navy-900/15 bg-white text-navy-900 hover:bg-navy-50 dark:border-white/15 dark:bg-navy-900 dark:text-white dark:hover:bg-white/5",
+        ghost:
+          "text-navy-500 hover:bg-navy-50 hover:text-navy-900 dark:text-navy-300 dark:hover:bg-white/5 dark:hover:text-white",
+        link: "text-navy-500 underline-offset-4 hover:text-navy-900 hover:underline dark:text-navy-300 dark:hover:text-white",
       },
       size: {
         default: "h-11 px-6",

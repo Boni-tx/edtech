@@ -7,6 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+
+type PerfilDict = Dictionary["perfil"];
 
 export default function ProfileForm({
   userId,
@@ -14,12 +17,14 @@ export default function ProfileForm({
   initialAvatarUrl,
   email,
   role,
+  dict,
 }: {
   userId: string;
   initialName: string;
   initialAvatarUrl: string | null;
   email: string;
   role: string;
+  dict: PerfilDict;
 }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -80,7 +85,7 @@ export default function ProfileForm({
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-navy-900 text-2xl font-bold text-white"
+          className="group relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-navy-900 text-2xl font-bold text-white dark:bg-white dark:text-navy-900"
         >
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -103,22 +108,22 @@ export default function ProfileForm({
       {avatarError && <p className="text-center text-xs text-red-500">{avatarError}</p>}
 
       <div>
-        <Label htmlFor="name">Nome completo</Label>
+        <Label htmlFor="name">{dict.name}</Label>
         <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
       </div>
 
       <div>
-        <Label>Email</Label>
+        <Label>{dict.email}</Label>
         <Input value={email} disabled />
       </div>
 
       <div>
-        <Label>Perfil</Label>
-        <Input value={role === "professor" ? "Professor" : "Aluno"} disabled />
+        <Label>{dict.role}</Label>
+        <Input value={role === "professor" ? dict.roleTeacher : dict.roleStudent} disabled />
       </div>
 
       <Button type="submit" className="w-full" size="lg" disabled={saving}>
-        {saving ? "Salvando..." : saved ? "Salvo!" : "Salvar alterações"}
+        {saving ? dict.saving : saved ? dict.saved : dict.save}
       </Button>
     </form>
   );

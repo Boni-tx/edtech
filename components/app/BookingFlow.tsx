@@ -10,12 +10,14 @@ import RatingPicker from "@/components/app/RatingPicker";
 import { explorerTxUrl } from "@/lib/solana/connection";
 import { MOCK_TIME_SLOTS, type Professor } from "@/lib/mock/professors";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const VAULT_ADDRESS = process.env.NEXT_PUBLIC_SOLANA_VAULT_ADDRESS ?? "";
 
 type Step = "select" | "depositing" | "held" | "releasing" | "released" | "rated";
+type BookingDict = Dictionary["booking"];
 
-export default function BookingFlow({ professor }: { professor: Professor }) {
+export default function BookingFlow({ professor, dict }: { professor: Professor; dict: BookingDict }) {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
 
@@ -86,11 +88,9 @@ export default function BookingFlow({ professor }: { professor: Professor }) {
   }
 
   return (
-    <div className="mt-6 rounded-2xl border border-navy-900/8 bg-white p-6 shadow-card">
-      <h2 className="mb-1 text-sm font-bold text-navy-900">Agendar aula</h2>
-      <p className="mb-4 text-xs text-navy-500">
-        Pagamento protegido: fica retido em escrow (Solana devnet) até a aula ser confirmada.
-      </p>
+    <div className="mt-6 rounded-2xl border border-navy-900/8 bg-white p-6 shadow-card dark:border-white/10 dark:bg-navy-900">
+      <h2 className="mb-1 text-sm font-bold text-navy-900 dark:text-white">{dict.title}</h2>
+      <p className="mb-4 text-xs text-navy-500 dark:text-navy-300">{dict.subtitle}</p>
 
       {step === "select" && (
         <>
@@ -103,8 +103,8 @@ export default function BookingFlow({ professor }: { professor: Professor }) {
                 className={cn(
                   "rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors",
                   selectedSlot === slot.id
-                    ? "border-navy-900 bg-navy-900 text-white"
-                    : "border-navy-900/12 text-navy-700 hover:border-navy-900/25"
+                    ? "border-navy-900 bg-navy-900 text-white dark:border-white dark:bg-white dark:text-navy-900"
+                    : "border-navy-900/12 text-navy-700 hover:border-navy-900/25 dark:border-white/15 dark:text-navy-300 dark:hover:border-white/40"
                 )}
               >
                 {slot.label}
@@ -123,7 +123,7 @@ export default function BookingFlow({ professor }: { professor: Professor }) {
           )}
 
           <Button className="w-full" size="lg" disabled={!selectedSlot} onClick={handlePay}>
-            Pagar {professor.priceSol} SOL e reservar horário
+            {dict.pay} {professor.priceSol} SOL {dict.payAndBook}
           </Button>
         </>
       )}
@@ -165,7 +165,7 @@ export default function BookingFlow({ professor }: { professor: Professor }) {
             {(step === "released" || step === "rated") && releaseSignature && (
               <>
                 <TxRow label="Liberação (cofre → professor)" signature={releaseSignature} />
-                <div className="flex items-center gap-2 text-sm font-medium text-navy-900">
+                <div className="flex items-center gap-2 text-sm font-medium text-navy-900 dark:text-white">
                   <CheckCircle2 className="h-4 w-4 text-confirm-600" />
                   Aula concluída!
                 </div>
@@ -173,8 +173,8 @@ export default function BookingFlow({ professor }: { professor: Professor }) {
             )}
 
             {step === "released" && (
-              <div className="rounded-xl border border-navy-900/8 p-4">
-                <p className="mb-2 text-sm font-medium text-navy-900">Como foi a aula?</p>
+              <div className="rounded-xl border border-navy-900/8 p-4 dark:border-white/10">
+                <p className="mb-2 text-sm font-medium text-navy-900 dark:text-white">Como foi a aula?</p>
                 <RatingPicker
                   onSubmit={(value) => {
                     setRating(value);
@@ -185,7 +185,7 @@ export default function BookingFlow({ professor }: { professor: Professor }) {
             )}
 
             {step === "rated" && rating && (
-              <p className="text-sm text-navy-500">
+              <p className="text-sm text-navy-500 dark:text-navy-300">
                 Obrigado pela avaliação ({rating} {rating === 1 ? "estrela" : "estrelas"})! Você
                 também pode avaliar depois em "Aulas".
               </p>
@@ -202,7 +202,7 @@ function TxRow({ label, signature }: { label: string; signature: string }) {
       href={explorerTxUrl(signature)}
       target="_blank"
       rel="noreferrer"
-      className="flex items-center justify-between gap-2 rounded-lg border border-navy-900/8 bg-navy-50 px-3.5 py-2.5 text-sm text-navy-700 hover:bg-navy-100"
+      className="flex items-center justify-between gap-2 rounded-lg border border-navy-900/8 bg-navy-50 px-3.5 py-2.5 text-sm text-navy-700 hover:bg-navy-100 dark:border-white/10 dark:bg-white/5 dark:text-navy-100 dark:hover:bg-white/10"
     >
       <span className="font-medium">{label}</span>
       <span className="flex items-center gap-1 truncate text-xs">

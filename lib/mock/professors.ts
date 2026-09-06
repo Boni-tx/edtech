@@ -8,6 +8,7 @@ export type Professor = {
   gradient: string;
   bio: string;
   walletAddress: string;
+  photoUrl?: string;
 };
 
 export const MOCK_PROFESSORS: Professor[] = [

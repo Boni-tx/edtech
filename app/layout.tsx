@@ -22,6 +22,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className={inter.variable}>
+      <head>
+        <script
+          // Aplica o tema salvo antes da hidratação, pra não piscar claro->escuro.
+          dangerouslySetInnerHTML={{
+            __html: `try {
+              var t = localStorage.getItem('theme');
+              if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+              }
+            } catch (e) {}`,
+          }}
+        />
+      </head>
       <body className="bg-canvas font-sans text-navy-900 antialiased">
         <SolanaWalletProvider>{children}</SolanaWalletProvider>
       </body>

@@ -6,7 +6,7 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LogoutButton() {
+export default function LogoutButton({ label = "Sair" }: { label?: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +27,7 @@ export default function LogoutButton() {
       disabled={loading}
     >
       <LogOut className="h-4 w-4" />
-      {loading ? "Saindo..." : "Sair"}
+      {loading ? "..." : label}
     </Button>
   );
 }

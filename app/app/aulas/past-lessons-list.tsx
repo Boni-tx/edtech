@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import RatingPicker from "@/components/app/RatingPicker";
 import { cn } from "@/lib/utils";
 
-export default function PastLessonsList() {
+export default function PastLessonsList({ rateLabel }: { rateLabel: string }) {
   const [lessons, setLessons] = useState<Lesson[]>(MOCK_PAST_LESSONS);
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
 
@@ -25,11 +25,14 @@ export default function PastLessonsList() {
         const professor = MOCK_PROFESSORS.find((p) => p.id === lesson.professorId);
         const date = new Date(lesson.date);
         return (
-          <div key={lesson.id} className="rounded-2xl border border-navy-900/8 bg-white p-4 shadow-card">
+          <div
+            key={lesson.id}
+            className="rounded-2xl border border-navy-900/8 bg-white p-4 shadow-card dark:border-white/10 dark:bg-navy-900"
+          >
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-navy-900">{professor?.name}</p>
-                <p className="text-xs text-navy-500">
+                <p className="text-sm font-semibold text-navy-900 dark:text-white">{professor?.name}</p>
+                <p className="text-xs text-navy-500 dark:text-navy-300">
                   {professor?.subject} · {date.toLocaleDateString("pt-BR")}
                 </p>
               </div>
@@ -41,7 +44,9 @@ export default function PastLessonsList() {
                       key={i}
                       className={cn(
                         "h-4 w-4",
-                        i < lesson.myRating! ? "fill-amber-400 text-amber-400" : "text-navy-100"
+                        i < lesson.myRating!
+                          ? "fill-amber-400 text-amber-400"
+                          : "text-navy-100 dark:text-white/15"
                       )}
                     />
                   ))}
@@ -50,7 +55,7 @@ export default function PastLessonsList() {
                 <RatingPicker onSubmit={(rating) => submitRating(lesson.id, rating)} />
               ) : (
                 <Button variant="outline" size="sm" onClick={() => setOpenReviewId(lesson.id)}>
-                  Avaliar
+                  {rateLabel}
                 </Button>
               )}
             </div>

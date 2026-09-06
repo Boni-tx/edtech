@@ -21,7 +21,7 @@ export default function RatingPicker({ onSubmit }: { onSubmit: (rating: number) 
             <Star
               className={cn(
                 "h-5 w-5 transition-colors",
-                value <= hovered ? "fill-amber-400 text-amber-400" : "text-navy-100"
+                value <= hovered ? "fill-amber-400 text-amber-400" : "text-navy-100 dark:text-white/15"
               )}
             />
           </button>
