@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { MOCK_PROFESSORS } from "@/lib/mock/professors";
 import StarRating from "@/components/app/StarRating";
+import BookingFlow from "@/components/app/BookingFlow";
 import { cn } from "@/lib/utils";
 
 export default function ProfessorPage({ params }: { params: { id: string } }) {
@@ -40,12 +41,11 @@ export default function ProfessorPage({ params }: { params: { id: string } }) {
             </div>
           </div>
 
-          <p className="mt-6 rounded-lg border border-dashed border-navy-900/15 px-4 py-3 text-sm text-navy-300">
-            Página de perfil do professor em construção — próximo passo: agenda de horários,
-            biografia e botão de agendar aula (com pagamento em escrow).
-          </p>
+          <p className="mt-4 text-sm leading-relaxed text-navy-500">{professor.bio}</p>
         </div>
       </div>
+
+      <BookingFlow professor={professor} />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Star } from "lucide-react";
 import { MOCK_PAST_LESSONS, type Lesson } from "@/lib/mock/lessons";
 import { MOCK_PROFESSORS } from "@/lib/mock/professors";
 import { Button } from "@/components/ui/button";
+import RatingPicker from "@/components/app/RatingPicker";
 import { cn } from "@/lib/utils";
 
 export default function PastLessonsList() {
@@ -54,33 +55,6 @@ export default function PastLessonsList() {
               )}
             </div>
           </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function RatingPicker({ onSubmit }: { onSubmit: (rating: number) => void }) {
-  const [hovered, setHovered] = useState(0);
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: 5 }).map((_, i) => {
-        const value = i + 1;
-        return (
-          <button
-            key={i}
-            type="button"
-            onMouseEnter={() => setHovered(value)}
-            onMouseLeave={() => setHovered(0)}
-            onClick={() => onSubmit(value)}
-          >
-            <Star
-              className={cn(
-                "h-5 w-5 transition-colors",
-                value <= hovered ? "fill-amber-400 text-amber-400" : "text-navy-100"
-              )}
-            />
-          </button>
         );
       })}
     </div>
