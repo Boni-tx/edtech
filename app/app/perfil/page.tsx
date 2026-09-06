@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import ProfileForm from "./profile-form";
 import LogoutButton from "@/app/sucesso/logout-button";
+import CompleteProfileModal from "@/components/app/CompleteProfileModal";
 
 export default async function PerfilPage() {
   const supabase = createClient();
@@ -16,9 +17,13 @@ export default async function PerfilPage() {
   const fullName = (user.user_metadata?.full_name as string | undefined) ?? "";
   const role = (user.user_metadata?.role as string | undefined) ?? "aluno";
   const avatarUrl = (user.user_metadata?.avatar_url as string | undefined) ?? null;
+  // Enquanto não existir o formulário de dados profissionais (CPF, CEP, etc.),
+  // qualquer professor conta como "perfil incompleto".
+  const needsProfessorProfile = role === "professor" && !user.user_metadata?.cpf;
 
   return (
     <div className="mx-auto max-w-lg">
+      <CompleteProfileModal show={needsProfessorProfile} />
       <h2 className="mb-6 text-lg font-bold text-navy-900">Configurações do perfil</h2>
       <div className="rounded-2xl border border-navy-900/8 bg-white p-6 shadow-card">
         <ProfileForm

@@ -1,0 +1,50 @@
+"use client";
+
+import { useState } from "react";
+import { ClipboardList, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+export default function CompleteProfileModal({ show }: { show: boolean }) {
+  const [dismissed, setDismissed] = useState(false);
+
+  if (!show || dismissed) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/40 px-6 backdrop-blur-sm"
+      onClick={() => setDismissed(true)}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-card-hover"
+      >
+        <button
+          type="button"
+          onClick={() => setDismissed(true)}
+          className="absolute right-4 top-4 text-navy-300 hover:text-navy-900"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-navy-900/5">
+          <ClipboardList className="h-7 w-7 text-navy-900" />
+        </div>
+
+        <h2 className="text-lg font-bold text-navy-900">Complete seu perfil profissional</h2>
+        <p className="mt-2 text-sm text-navy-500">
+          Professores com perfil completo (CPF, endereço, dados bancários e verificação) aparecem
+          mais nas buscas e passam mais confiança pros alunos.
+        </p>
+
+        <div className="mt-6 flex flex-col gap-2.5">
+          <Button size="lg" className="w-full" onClick={() => setDismissed(true)}>
+            Completar perfil
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => setDismissed(true)}>
+            Agora não
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
