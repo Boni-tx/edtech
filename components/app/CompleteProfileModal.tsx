@@ -9,6 +9,11 @@ export default function CompleteProfileModal({ show }: { show: boolean }) {
 
   if (!show || dismissed) return null;
 
+  function goToForm() {
+    setDismissed(true);
+    document.getElementById("dados-profissionais")?.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/40 px-6 backdrop-blur-sm"
@@ -37,7 +42,7 @@ export default function CompleteProfileModal({ show }: { show: boolean }) {
         </p>
 
         <div className="mt-6 flex flex-col gap-2.5">
-          <Button size="lg" className="w-full" onClick={() => setDismissed(true)}>
+          <Button size="lg" className="w-full" onClick={goToForm}>
             Completar perfil
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setDismissed(true)}>
