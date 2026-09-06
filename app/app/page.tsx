@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MOCK_PROFESSORS } from "@/lib/mock/professors";
 import StarRating from "@/components/app/StarRating";
 import { cn } from "@/lib/utils";
@@ -14,8 +15,9 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {professors.map((professor) => (
-          <div
+          <Link
             key={professor.id}
+            href={`/app/professor/${professor.id}`}
             className="group overflow-hidden rounded-2xl border border-navy-900/8 bg-white shadow-card transition-shadow hover:shadow-card-hover"
           >
             <div className={cn("flex h-32 items-center justify-center bg-gradient-to-br text-3xl font-bold text-white/90", professor.gradient)}>
@@ -42,7 +44,7 @@ export default function DashboardPage() {
               </div>
               <StarRating rating={professor.rating} />
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
