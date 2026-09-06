@@ -133,7 +133,7 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
     if (upsertError) {
       setSaving(false);
       setError(
-        upsertError.message.includes("does not exist")
+        /does not exist|could not find the table/i.test(upsertError.message)
           ? "A tabela 'professor_profiles' ainda não existe no Supabase (rode supabase/publish-profile.sql)."
           : "Falha ao publicar: " + upsertError.message
       );
