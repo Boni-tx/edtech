@@ -199,7 +199,7 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
 
       <div>
         <Label htmlFor="pub-name">Nome</Label>
-        <Input id="pub-name" value={form.name} onChange={(e) => update("name", e.target.value)} required />
+        <Input id="pub-name" value={form.name} onChange={(e) => update("name", e.target.value)} />
       </div>
 
       <div>
@@ -209,7 +209,6 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
           placeholder="Ex.: Violão, Cálculo Avançado, Redação..."
           value={form.subject}
           onChange={(e) => update("subject", e.target.value)}
-          required
         />
       </div>
 
@@ -220,7 +219,6 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
           rows={3}
           value={form.bio}
           onChange={(e) => update("bio", e.target.value)}
-          required
           className="flex w-full rounded-lg border border-navy-900/15 bg-white px-3.5 py-2.5 text-sm text-navy-900 outline-none transition-colors placeholder:text-navy-300 focus-visible:border-navy-900/30 focus-visible:ring-2 focus-visible:ring-navy-900/15 dark:border-white/15 dark:bg-navy-800 dark:text-white dark:placeholder:text-navy-500"
         />
       </div>
@@ -232,7 +230,6 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
           placeholder="00000-000"
           value={form.cep}
           onChange={(e) => update("cep", formatCEP(e.target.value))}
-          required
         />
       </div>
 
@@ -243,7 +240,6 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
           placeholder="(00) 00000-0000"
           value={form.telefone}
           onChange={(e) => update("telefone", e.target.value)}
-          required
         />
       </div>
 
@@ -254,7 +250,6 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
           placeholder="Endereço público da sua carteira"
           value={form.walletAddress}
           onChange={(e) => update("walletAddress", e.target.value)}
-          required
         />
       </div>
 

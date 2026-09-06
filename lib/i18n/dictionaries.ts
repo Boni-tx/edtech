@@ -12,7 +12,7 @@ type SidebarDict = {
 
 type TopbarDict = { hello: string };
 
-type DashboardDict = { title: string; count: string };
+type DashboardDict = { title: string; count: string; countOne: string };
 
 type CalendarDict = { title: string; none: string };
 
@@ -71,6 +71,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     dashboard: {
       title: "Professores disponíveis agora",
       count: "professores",
+      countOne: "professor",
     },
     calendar: {
       title: "Aulas agendadas",
@@ -129,6 +130,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     dashboard: {
       title: "Tutors available now",
       count: "tutors",
+      countOne: "tutor",
     },
     calendar: {
       title: "Scheduled lessons",

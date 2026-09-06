@@ -14,7 +14,7 @@ export default async function DashboardPage() {
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-lg font-bold text-navy-900 dark:text-white">{dict.dashboard.title}</h2>
         <span className="text-sm text-navy-300 dark:text-navy-500">
-          {sorted.length} {dict.dashboard.count}
+          {sorted.length} {sorted.length === 1 ? dict.dashboard.countOne : dict.dashboard.count}
         </span>
       </div>
 
