@@ -60,10 +60,14 @@ function LoginPageContent() {
 
   const handleGoogleAuth = async () => {
     setAuthError(null);
+    // O toggle Aluno/Professor só existe na aba de cadastro — no login o
+    // valor de `role` não representa uma escolha da pessoa, então só
+    // mandamos ele adiante (pra gravar no primeiro acesso) quando é cadastro.
+    const roleParam = tab === "signup" ? `&role=${role}` : "";
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/sucesso`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/sucesso${roleParam}`,
       },
     });
     if (error) setAuthError(traduzErro(error.message));
