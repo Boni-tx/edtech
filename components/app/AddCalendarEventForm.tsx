@@ -57,7 +57,11 @@ export default function AddCalendarEventForm({
 
     setSaving(false);
     if (insertError) {
-      setError(insertError.message);
+      setError(
+        /could not find the table/i.test(insertError.message)
+          ? "A tabela 'calendar_events' ainda não existe no Supabase (rode supabase/calendar-earnings-reviews.sql)."
+          : insertError.message
+      );
       return;
     }
 
