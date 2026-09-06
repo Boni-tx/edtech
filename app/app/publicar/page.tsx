@@ -25,7 +25,7 @@ export default async function PublicarPage() {
     .maybeSingle();
 
   const meta = user.user_metadata ?? {};
-  const { dict } = getServerDictionary();
+  const { dict, locale } = getServerDictionary();
 
   return (
     <div className="mx-auto max-w-lg">
@@ -41,6 +41,7 @@ export default async function PublicarPage() {
         userId={user.id}
         postalCodeLabel={dict.professional.postalCodeLabel}
         phoneLabel={dict.professional.phoneLabel}
+        isBrazil={locale === "pt"}
         initial={{
           name: existing?.name ?? (meta.full_name as string | undefined) ?? "",
           subject: existing?.subject ?? "",

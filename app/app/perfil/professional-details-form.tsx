@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { isValidCPF, formatCPF, formatCEP } from "@/lib/validation";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Dictionary, Locale } from "@/lib/i18n/dictionaries";
 
 type Initial = {
   cpf: string;
@@ -25,10 +25,13 @@ type Initial = {
 export default function ProfessionalDetailsForm({
   initial,
   dict,
+  locale,
 }: {
   initial: Initial;
   dict: Dictionary["professional"];
+  locale: Locale;
 }) {
+  const isBrazil = locale === "pt";
   const router = useRouter();
   const [form, setForm] = useState(initial);
   const [cpfError, setCpfError] = useState<string | null>(null);
@@ -72,7 +75,7 @@ export default function ProfessionalDetailsForm({
     e.preventDefault();
     setCpfError(null);
 
-    if (!isValidCPF(form.cpf)) {
+    if (isBrazil ? !isValidCPF(form.cpf) : form.cpf.trim().length === 0) {
       setCpfError(dict.idError);
       return;
     }
@@ -102,7 +105,7 @@ export default function ProfessionalDetailsForm({
             id="cpf"
             placeholder={dict.idPlaceholder}
             value={form.cpf}
-            onChange={(e) => update("cpf", formatCPF(e.target.value))}
+            onChange={(e) => update("cpf", isBrazil ? formatCPF(e.target.value) : e.target.value)}
             className={cpfError ? "border-red-400 focus-visible:ring-red-200" : undefined}
           />
           {cpfError && <p className="mt-1.5 text-xs font-medium text-red-500">{cpfError}</p>}
@@ -114,11 +117,11 @@ export default function ProfessionalDetailsForm({
             <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
             <Input
               id="cep"
-              placeholder="00000-000"
+              placeholder={isBrazil ? "00000-000" : ""}
               className="pl-10"
               value={form.cep}
-              onChange={(e) => update("cep", formatCEP(e.target.value))}
-              onBlur={handleCepBlur}
+              onChange={(e) => update("cep", isBrazil ? formatCEP(e.target.value) : e.target.value)}
+              onBlur={isBrazil ? handleCepBlur : undefined}
             />
             {cepLoading && (
               <Loader2 className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-navy-300" />

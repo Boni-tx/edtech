@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from "@solana/web3.js";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import RatingPicker from "@/components/app/RatingPicker";
 import { explorerTxUrl } from "@/lib/solana/connection";
 import { MOCK_TIME_SLOTS, type Professor } from "@/lib/mock/professors";
+import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
@@ -16,6 +17,32 @@ const VAULT_ADDRESS = process.env.NEXT_PUBLIC_SOLANA_VAULT_ADDRESS ?? "";
 
 type Step = "select" | "depositing" | "held" | "releasing" | "released" | "rated";
 type BookingDict = Dictionary["booking"];
+
+function slotToDate(slotId: string): Date {
+  const now = new Date();
+  const d = new Date(now);
+  switch (slotId) {
+    case "s1":
+      d.setHours(18, 0, 0, 0);
+      return d;
+    case "s2":
+      d.setDate(d.getDate() + 1);
+      d.setHours(10, 0, 0, 0);
+      return d;
+    case "s3":
+      d.setDate(d.getDate() + 1);
+      d.setHours(15, 0, 0, 0);
+      return d;
+    case "s4": {
+      const diff = (5 - d.getDay() + 7) % 7 || 7;
+      d.setDate(d.getDate() + diff);
+      d.setHours(9, 0, 0, 0);
+      return d;
+    }
+    default:
+      return now;
+  }
+}
 
 export default function BookingFlow({ professor, dict }: { professor: Professor; dict: BookingDict }) {
   const { connection } = useConnection();
@@ -27,6 +54,19 @@ export default function BookingFlow({ professor, dict }: { professor: Professor;
   const [releaseSignature, setReleaseSignature] = useState<string | null>(null);
   const [rating, setRating] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [me, setMe] = useState<{ id: string; name: string } | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        setMe({
+          id: data.user.id,
+          name: (data.user.user_metadata?.full_name as string | undefined) || data.user.email || "Aluno",
+        });
+      }
+    });
+  }, []);
 
   const vaultPubkey = useMemo(() => {
     try {
@@ -62,6 +102,36 @@ export default function BookingFlow({ professor, dict }: { professor: Professor;
       await connection.confirmTransaction(signature, "confirmed");
       setDepositSignature(signature);
       setStep("held");
+
+      // Aula agendada: entra no calendário do aluno e, se for um professor
+      // real (publicado), no calendário dele também.
+      if (me && selectedSlot) {
+        const scheduledAt = slotToDate(selectedSlot).toISOString();
+        const supabase = createClient();
+        const rows = [
+          {
+            owner_id: me.id,
+            title: `Aula com ${professor.name}`,
+            subtitle: professor.subject,
+            scheduled_at: scheduledAt,
+            source: "lesson",
+            counterparty_user_id: professor.userId ?? null,
+          },
+          ...(professor.userId
+            ? [
+                {
+                  owner_id: professor.userId,
+                  title: `Aula com ${me.name}`,
+                  subtitle: professor.subject,
+                  scheduled_at: scheduledAt,
+                  source: "lesson",
+                  counterparty_user_id: me.id,
+                },
+              ]
+            : []),
+        ];
+        await supabase.from("calendar_events").insert(rows);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha ao enviar o pagamento.");
       setStep("select");
@@ -81,9 +151,32 @@ export default function BookingFlow({ professor, dict }: { professor: Professor;
       if (!res.ok) throw new Error(data.error ?? "Falha ao liberar o pagamento.");
       setReleaseSignature(data.signature);
       setStep("released");
+
+      if (professor.userId) {
+        const supabase = createClient();
+        await supabase.from("payments").insert({
+          professor_user_id: professor.userId,
+          student_name: me?.name ?? null,
+          amount_sol: professor.priceSol,
+          tx_signature: data.signature,
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha ao liberar o pagamento.");
       setStep("held");
+    }
+  }
+
+  async function handleRate(value: number) {
+    setRating(value);
+    setStep("rated");
+    if (professor.userId) {
+      const supabase = createClient();
+      await supabase.from("reviews").insert({
+        professor_user_id: professor.userId,
+        student_name: me?.name ?? null,
+        rating: value,
+      });
     }
   }
 
@@ -175,12 +268,7 @@ export default function BookingFlow({ professor, dict }: { professor: Professor;
             {step === "released" && (
               <div className="rounded-xl border border-navy-900/8 p-4 dark:border-white/10">
                 <p className="mb-2 text-sm font-medium text-navy-900 dark:text-white">Como foi a aula?</p>
-                <RatingPicker
-                  onSubmit={(value) => {
-                    setRating(value);
-                    setStep("rated");
-                  }}
-                />
+                <RatingPicker onSubmit={handleRate} />
               </div>
             )}
 

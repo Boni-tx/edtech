@@ -7,6 +7,7 @@ type SidebarDict = {
   chat: string;
   solanaDemo: string;
   publishProfile: string;
+  earnings: string;
   settings: string;
 };
 
@@ -14,11 +15,19 @@ type TopbarDict = { hello: string };
 
 type DashboardDict = { title: string; count: string; countOne: string };
 
-type CalendarDict = { title: string; none: string };
+type CalendarDict = {
+  title: string;
+  none: string;
+  add: string;
+  eventTitle: string;
+  eventDate: string;
+  eventTime: string;
+  cancel: string;
+};
 
-type LessonsDict = { title: string; rate: string };
+type LessonsDict = { title: string; rate: string; empty: string; thanks: string };
 
-type ChatDict = { title: string; placeholder: string; empty: string };
+type ChatDict = { title: string; placeholder: string; empty: string; noConversations: string };
 
 type PerfilDict = {
   title: string;
@@ -82,6 +91,61 @@ type LandingDict = {
   footerRights: string;
 };
 
+type LoginDict = {
+  welcomeBack: string;
+  createAccount: string;
+  signInSubtitle: string;
+  signUpSubtitle: string;
+  tabLogin: string;
+  tabSignup: string;
+  continueWithGoogle: string;
+  signUpWithGoogle: string;
+  orWithEmail: string;
+  or: string;
+  email: string;
+  emailPlaceholder: string;
+  password: string;
+  forgotPassword: string;
+  passwordPlaceholder: string;
+  signIn: string;
+  signingIn: string;
+  roleQuestion: string;
+  roleStudent: string;
+  roleTeacher: string;
+  fullName: string;
+  fullNamePlaceholder: string;
+  confirmPassword: string;
+  confirmPasswordPlaceholder: string;
+  createAccountButton: string;
+  creatingAccount: string;
+  termsPrefix: string;
+  termsOfUse: string;
+  and: string;
+  privacyPolicy: string;
+  errorEmailRequired: string;
+  errorPasswordLength: string;
+  errorNameRequired: string;
+  errorPasswordMismatch: string;
+  signupConfirmEmailNotice: string;
+  errorInvalidCredentials: string;
+  errorUserExists: string;
+  errorEmailNotConfirmed: string;
+  errorPasswordTooShort: string;
+  errorInvalidEmail: string;
+  errorRateLimit: string;
+  errorGeneric: string;
+};
+
+type EarningsDict = {
+  title: string;
+  totalEarned: string;
+  noPayments: string;
+  recentPayments: string;
+  reviewsTitle: string;
+  noReviews: string;
+  from: string;
+};
+
 type ProfessionalDict = {
   title: string;
   description: string;
@@ -120,6 +184,8 @@ export type Dictionary = {
   booking: BookingDict;
   landing: LandingDict;
   professional: ProfessionalDict;
+  login: LoginDict;
+  earnings: EarningsDict;
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -131,6 +197,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       chat: "Chat",
       solanaDemo: "Demonstração Solana",
       publishProfile: "Publicar perfil de professor",
+      earnings: "Ganhos",
       settings: "Configurações",
     },
     topbar: {
@@ -144,15 +211,23 @@ export const dictionaries: Record<Locale, Dictionary> = {
     calendar: {
       title: "Aulas agendadas",
       none: "Você ainda não tem aulas agendadas.",
+      add: "Adicionar",
+      eventTitle: "Título",
+      eventDate: "Data",
+      eventTime: "Hora",
+      cancel: "Cancelar",
     },
     lessons: {
       title: "Aulas passadas",
       rate: "Avaliar",
+      empty: "Você ainda não tem aulas passadas.",
+      thanks: "Obrigado pela avaliação!",
     },
     chat: {
       title: "Conversas",
       placeholder: "Digite uma mensagem...",
       empty: "Envie uma mensagem pra começar a conversa.",
+      noConversations: "Você ainda não tem conversas. Elas aparecem aqui depois que você agendar uma aula.",
     },
     perfil: {
       title: "Configurações do perfil",
@@ -253,6 +328,59 @@ export const dictionaries: Record<Locale, Dictionary> = {
       modalCta: "Completar perfil",
       modalLater: "Agora não",
     },
+    login: {
+      welcomeBack: "Bem-vindo de volta",
+      createAccount: "Crie sua conta",
+      signInSubtitle: "Entre para continuar sua jornada de aprendizado.",
+      signUpSubtitle: "Leva menos de um minuto para começar.",
+      tabLogin: "Entrar",
+      tabSignup: "Cadastrar",
+      continueWithGoogle: "Continuar com o Google",
+      signUpWithGoogle: "Cadastrar com o Google",
+      orWithEmail: "ou entre com seu email",
+      or: "ou",
+      email: "Email",
+      emailPlaceholder: "voce@email.com",
+      password: "Senha",
+      forgotPassword: "Esqueci minha senha",
+      passwordPlaceholder: "••••••••",
+      signIn: "Entrar",
+      signingIn: "Entrando...",
+      roleQuestion: "Você quer aprender ou ensinar?",
+      roleStudent: "Aluno",
+      roleTeacher: "Professor",
+      fullName: "Nome completo",
+      fullNamePlaceholder: "Seu nome completo",
+      confirmPassword: "Confirmar senha",
+      confirmPasswordPlaceholder: "Repita a senha",
+      createAccountButton: "Criar conta",
+      creatingAccount: "Criando conta...",
+      termsPrefix: "Ao continuar, você concorda com nossos",
+      termsOfUse: "Termos de Uso",
+      and: "e",
+      privacyPolicy: "Política de Privacidade",
+      errorEmailRequired: "Digite um email válido.",
+      errorPasswordLength: "A senha precisa ter pelo menos 6 caracteres.",
+      errorNameRequired: "Digite seu nome completo.",
+      errorPasswordMismatch: "As senhas não coincidem.",
+      signupConfirmEmailNotice: "Conta criada! Confira seu email para confirmar o cadastro antes de entrar.",
+      errorInvalidCredentials: "Email ou senha incorretos.",
+      errorUserExists: "Já existe uma conta com esse email.",
+      errorEmailNotConfirmed: "Confirme seu email antes de entrar.",
+      errorPasswordTooShort: "A senha precisa ter pelo menos 6 caracteres.",
+      errorInvalidEmail: "Digite um email válido.",
+      errorRateLimit: "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
+      errorGeneric: "Não foi possível concluir. Tente novamente em instantes.",
+    },
+    earnings: {
+      title: "Seus ganhos",
+      totalEarned: "Total recebido",
+      noPayments: "Você ainda não recebeu nenhum pagamento.",
+      recentPayments: "Pagamentos recentes",
+      reviewsTitle: "Avaliações dos alunos",
+      noReviews: "Você ainda não recebeu nenhuma avaliação.",
+      from: "de",
+    },
   },
   en: {
     sidebar: {
@@ -262,6 +390,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       chat: "Chat",
       solanaDemo: "Solana demo",
       publishProfile: "Publish tutor profile",
+      earnings: "Earnings",
       settings: "Settings",
     },
     topbar: {
@@ -275,15 +404,23 @@ export const dictionaries: Record<Locale, Dictionary> = {
     calendar: {
       title: "Scheduled lessons",
       none: "You don't have any scheduled lessons yet.",
+      add: "Add",
+      eventTitle: "Title",
+      eventDate: "Date",
+      eventTime: "Time",
+      cancel: "Cancel",
     },
     lessons: {
       title: "Past lessons",
       rate: "Rate",
+      empty: "You don't have any past lessons yet.",
+      thanks: "Thanks for the rating!",
     },
     chat: {
       title: "Conversations",
       placeholder: "Type a message...",
       empty: "Send a message to start the conversation.",
+      noConversations: "You don't have any conversations yet. They'll show up here once you book a lesson.",
     },
     perfil: {
       title: "Profile settings",
@@ -383,6 +520,59 @@ export const dictionaries: Record<Locale, Dictionary> = {
         "Tutors with a complete profile (ID, address, payout details and verification) rank higher in search and build more trust with students.",
       modalCta: "Complete profile",
       modalLater: "Not now",
+    },
+    login: {
+      welcomeBack: "Welcome back",
+      createAccount: "Create your account",
+      signInSubtitle: "Sign in to continue your learning journey.",
+      signUpSubtitle: "Takes less than a minute to get started.",
+      tabLogin: "Log in",
+      tabSignup: "Sign up",
+      continueWithGoogle: "Continue with Google",
+      signUpWithGoogle: "Sign up with Google",
+      orWithEmail: "or sign in with your email",
+      or: "or",
+      email: "Email",
+      emailPlaceholder: "you@email.com",
+      password: "Password",
+      forgotPassword: "Forgot my password",
+      passwordPlaceholder: "••••••••",
+      signIn: "Log in",
+      signingIn: "Logging in...",
+      roleQuestion: "Do you want to learn or teach?",
+      roleStudent: "Student",
+      roleTeacher: "Tutor",
+      fullName: "Full name",
+      fullNamePlaceholder: "Your full name",
+      confirmPassword: "Confirm password",
+      confirmPasswordPlaceholder: "Repeat your password",
+      createAccountButton: "Create account",
+      creatingAccount: "Creating account...",
+      termsPrefix: "By continuing, you agree to our",
+      termsOfUse: "Terms of Use",
+      and: "and",
+      privacyPolicy: "Privacy Policy",
+      errorEmailRequired: "Enter a valid email.",
+      errorPasswordLength: "Password must be at least 6 characters.",
+      errorNameRequired: "Enter your full name.",
+      errorPasswordMismatch: "Passwords don't match.",
+      signupConfirmEmailNotice: "Account created! Check your email to confirm your signup before logging in.",
+      errorInvalidCredentials: "Incorrect email or password.",
+      errorUserExists: "An account with this email already exists.",
+      errorEmailNotConfirmed: "Confirm your email before logging in.",
+      errorPasswordTooShort: "Password must be at least 6 characters.",
+      errorInvalidEmail: "Enter a valid email.",
+      errorRateLimit: "Too many attempts in a short time. Wait a few minutes and try again.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    earnings: {
+      title: "Your earnings",
+      totalEarned: "Total earned",
+      noPayments: "You haven't received any payments yet.",
+      recentPayments: "Recent payments",
+      reviewsTitle: "Student reviews",
+      noReviews: "You haven't received any reviews yet.",
+      from: "from",
     },
   },
 };

@@ -2,13 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutGrid, CalendarDays, History, MessageCircle, Settings, Sparkles, Plus } from "lucide-react";
+import { LayoutGrid, CalendarDays, History, MessageCircle, Settings, Sparkles, Plus, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 type SidebarDict = Dictionary["sidebar"];
 
-export default function Sidebar({ isProfessor, dict }: { isProfessor: boolean; dict: SidebarDict }) {
+export default function Sidebar({
+  isProfessor,
+  hasPublishedProfile,
+  dict,
+}: {
+  isProfessor: boolean;
+  hasPublishedProfile: boolean;
+  dict: SidebarDict;
+}) {
   const pathname = usePathname();
 
   const navItems = [
@@ -52,6 +60,21 @@ export default function Sidebar({ isProfessor, dict }: { isProfessor: boolean; d
         >
           <Sparkles className="h-5 w-5" />
         </Link>
+
+        {isProfessor && hasPublishedProfile && (
+          <Link
+            href="/app/ganhos"
+            title={dict.earnings}
+            className={cn(
+              "flex h-12 w-12 flex-col items-center justify-center gap-0.5 rounded-xl transition-colors",
+              pathname === "/app/ganhos"
+                ? "bg-navy-900 text-white dark:bg-white dark:text-navy-900"
+                : "text-navy-300 hover:bg-navy-50 hover:text-navy-900 dark:text-navy-500 dark:hover:bg-white/5 dark:hover:text-white"
+            )}
+          >
+            <Wallet className="h-5 w-5" />
+          </Link>
+        )}
 
         {isProfessor && (
           <Link

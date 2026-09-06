@@ -3,6 +3,7 @@ import { MOCK_PROFESSORS, type Professor } from "@/lib/mock/professors";
 
 type ProfessorProfileRow = {
   id: string;
+  user_id: string;
   name: string;
   subject: string;
   bio: string;
@@ -13,9 +14,13 @@ type ProfessorProfileRow = {
   reviews_count: number;
 };
 
+const PROFESSOR_COLUMNS =
+  "id,user_id,name,subject,bio,photo_url,wallet_address,price_sol,rating,reviews_count";
+
 function rowToProfessor(row: ProfessorProfileRow): Professor {
   return {
     id: row.id,
+    userId: row.user_id,
     name: row.name,
     subject: row.subject,
     rating: row.rating,
@@ -38,7 +43,7 @@ export async function getAllProfessors(): Promise<Professor[]> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("professor_profiles")
-    .select("id,name,subject,bio,photo_url,wallet_address,price_sol,rating,reviews_count")
+    .select(PROFESSOR_COLUMNS)
     .eq("published", true);
 
   const real = !error && data ? data.map(rowToProfessor) : [];
@@ -52,7 +57,7 @@ export async function getProfessorById(id: string): Promise<Professor | null> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("professor_profiles")
-    .select("id,name,subject,bio,photo_url,wallet_address,price_sol,rating,reviews_count")
+    .select(PROFESSOR_COLUMNS)
     .eq("id", id)
     .eq("published", true)
     .maybeSingle();

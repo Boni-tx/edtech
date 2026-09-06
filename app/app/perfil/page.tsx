@@ -61,6 +61,7 @@ export default async function PerfilPage() {
       {role === "professor" && (
         <ProfessionalDetailsForm
           dict={dict.professional}
+          locale={locale}
           initial={{
             cpf: (meta.cpf as string | undefined) ?? "",
             cep: (meta.cep as string | undefined) ?? "",

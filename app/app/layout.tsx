@@ -22,9 +22,23 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const role = (user.user_metadata?.role as string | undefined) ?? "aluno";
   const { dict } = getServerDictionary();
 
+  let hasPublishedProfile = false;
+  if (role === "professor") {
+    const { data } = await supabase
+      .from("professor_profiles")
+      .select("id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    hasPublishedProfile = !!data;
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-canvas dark:bg-navy-950">
-      <Sidebar isProfessor={role === "professor"} dict={dict.sidebar} />
+      <Sidebar
+        isProfessor={role === "professor"}
+        hasPublishedProfile={hasPublishedProfile}
+        dict={dict.sidebar}
+      />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Topbar name={name} avatarUrl={avatarUrl} hello={dict.topbar.hello} />
         <main className="flex-1 overflow-y-auto p-8">{children}</main>

@@ -26,11 +26,13 @@ export default function PublishProfileForm({
   initial,
   postalCodeLabel,
   phoneLabel,
+  isBrazil,
 }: {
   userId: string;
   initial: Initial;
   postalCodeLabel: string;
   phoneLabel: string;
+  isBrazil: boolean;
 }) {
   const router = useRouter();
   const photoInputRef = useRef<HTMLInputElement>(null);
@@ -86,7 +88,7 @@ export default function PublishProfileForm({
       setError("Preencha nome, conteúdo e bio.");
       return;
     }
-    if (form.cep.replace(/\D/g, "").length !== 8) {
+    if (isBrazil ? form.cep.replace(/\D/g, "").length !== 8 : form.cep.trim().length === 0) {
       setError("Digite um CEP válido.");
       return;
     }
@@ -239,7 +241,7 @@ export default function PublishProfileForm({
           id="pub-cep"
           placeholder="00000-000"
           value={form.cep}
-          onChange={(e) => update("cep", formatCEP(e.target.value))}
+          onChange={(e) => update("cep", isBrazil ? formatCEP(e.target.value) : e.target.value)}
         />
       </div>
 

@@ -7,33 +7,38 @@ import { cn } from "@/lib/utils";
 
 type Message = { from: "me" | "them"; text: string };
 
-const INITIAL_MESSAGES: Record<string, Message[]> = {
-  "1": [{ from: "them", text: "Oi! Podemos marcar a aula de Química pra essa semana." }],
-  "2": [{ from: "them", text: "Beleza, te mando os exercícios de Matemática antes da aula." }],
-};
-
 export default function ChatPanel({
   placeholder,
   emptyLabel,
+  noConversationsLabel,
 }: {
   placeholder: string;
   emptyLabel: string;
+  noConversationsLabel: string;
 }) {
-  const [activeId, setActiveId] = useState(MOCK_PROFESSORS[0].id);
-  const [messagesByProfessor, setMessagesByProfessor] = useState(INITIAL_MESSAGES);
+  const [activeId, setActiveId] = useState<string | null>(MOCK_PROFESSORS[0]?.id ?? null);
+  const [messagesByProfessor, setMessagesByProfessor] = useState<Record<string, Message[]>>({});
   const [draft, setDraft] = useState("");
 
-  const activeProfessor = MOCK_PROFESSORS.find((p) => p.id === activeId)!;
-  const messages = messagesByProfessor[activeId] ?? [];
+  const activeProfessor = MOCK_PROFESSORS.find((p) => p.id === activeId) ?? null;
+  const messages = activeId ? messagesByProfessor[activeId] ?? [] : [];
 
   function handleSend(e: FormEvent) {
     e.preventDefault();
-    if (!draft.trim()) return;
+    if (!draft.trim() || !activeId) return;
     setMessagesByProfessor((prev) => ({
       ...prev,
       [activeId]: [...(prev[activeId] ?? []), { from: "me", text: draft.trim() }],
     }));
     setDraft("");
+  }
+
+  if (MOCK_PROFESSORS.length === 0) {
+    return (
+      <div className="flex h-[calc(100%-3rem)] items-center justify-center rounded-2xl border border-navy-900/8 bg-white text-sm text-navy-300 shadow-card dark:border-white/10 dark:bg-navy-900 dark:text-navy-500">
+        {noConversationsLabel}
+      </div>
+    );
   }
 
   return (
@@ -66,7 +71,7 @@ export default function ChatPanel({
 
       <div className="flex flex-1 flex-col">
         <div className="border-b border-navy-900/8 px-5 py-3 dark:border-white/10">
-          <p className="text-sm font-semibold text-navy-900 dark:text-white">{activeProfessor.name}</p>
+          <p className="text-sm font-semibold text-navy-900 dark:text-white">{activeProfessor?.name}</p>
         </div>
 
         <div className="flex-1 space-y-3 overflow-y-auto p-5">

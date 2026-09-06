@@ -9,22 +9,14 @@ export type Professor = {
   bio: string;
   walletAddress: string;
   photoUrl?: string;
+  // Id de auth.users do professor — só existe pra professores reais
+  // (professor_profiles). Usado pra gravar no calendário/ganhos/avaliações dele.
+  userId?: string;
 };
 
-export const MOCK_PROFESSORS: Professor[] = [
-  {
-    id: "1",
-    name: "Professor Teste",
-    subject: "Matéria Teste",
-    rating: 5,
-    reviewsCount: 128,
-    priceSol: 0.01,
-    gradient: "from-navy-900 to-navy-700",
-    bio: "Professor dedicado a reforço escolar personalizado, com foco em destravar dúvidas pontuais antes de provas. Aulas objetivas, direto ao ponto, adaptadas ao ritmo de cada aluno.",
-    // Carteira de demonstração (devnet) — usada só pra mostrar o recebimento real do escrow.
-    walletAddress: "3CrnsCFjd4tbKyGHubFDBGYHfAHeLHUUkijtZTmMcJZv",
-  },
-];
+// Vazio de propósito — os professores agora vêm todos de verdade da tabela
+// professor_profiles (veja lib/professors.ts).
+export const MOCK_PROFESSORS: Professor[] = [];
 
 export const MOCK_TIME_SLOTS = [
   { id: "s1", label: "Hoje, 18:00" },
