@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import LogoutButton from "./logout-button";
+import AutoRedirect from "./auto-redirect";
 
 export default async function SucessoPage() {
   const supabase = createClient();
@@ -20,6 +17,7 @@ export default async function SucessoPage() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-canvas px-6 py-16">
+      <AutoRedirect to="/app" />
       <div
         aria-hidden
         className="absolute inset-0 -z-10 bg-grid-fade bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]"
@@ -37,15 +35,6 @@ export default async function SucessoPage() {
           Você está logado como{" "}
           <span className="font-medium text-navy-900">{user.email}</span>.
         </p>
-
-        <Link
-          href="/demo-aula"
-          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "mt-6 w-full")}
-        >
-          Ver demonstração de escrow (Solana devnet)
-        </Link>
-
-        <LogoutButton />
       </div>
     </main>
   );
