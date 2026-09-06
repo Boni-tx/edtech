@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { GraduationCap } from "lucide-react";
 
-export default function Topbar({ name }: { name: string }) {
+export default function Topbar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
   const initial = name.trim().charAt(0).toUpperCase() || "?";
 
   return (
@@ -17,9 +17,14 @@ export default function Topbar({ name }: { name: string }) {
 
       <Link
         href="/app/perfil"
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-navy-900 text-sm font-bold text-white"
+        className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-navy-900 text-sm font-bold text-white"
       >
-        {initial}
+        {avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
+        ) : (
+          initial
+        )}
       </Link>
     </header>
   );

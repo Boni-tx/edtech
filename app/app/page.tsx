@@ -19,10 +19,24 @@ export default function DashboardPage() {
             <div className={cn("flex h-32 items-center justify-center bg-gradient-to-br text-3xl font-bold text-white/90", professor.gradient)}>
               {professor.name.charAt(0)}
             </div>
-            <div className="flex items-center justify-between gap-2 bg-navy-50 px-4 py-3">
+            <div
+              className={cn(
+                "flex items-center justify-between gap-2 px-4 py-3",
+                professor.rating === 5 ? "bg-navy-900" : "bg-navy-50"
+              )}
+            >
               <div>
-                <p className="text-sm font-semibold text-navy-900">{professor.name}</p>
-                <p className="text-xs text-navy-500">{professor.subject}</p>
+                <p
+                  className={cn(
+                    "text-sm font-semibold",
+                    professor.rating === 5 ? "text-white" : "text-navy-900"
+                  )}
+                >
+                  {professor.name}
+                </p>
+                <p className={cn("text-xs", professor.rating === 5 ? "text-navy-100" : "text-navy-500")}>
+                  {professor.subject}
+                </p>
               </div>
               <StarRating rating={professor.rating} />
             </div>

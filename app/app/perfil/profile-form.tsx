@@ -1,25 +1,34 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { Camera, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
 export default function ProfileForm({
+  userId,
   initialName,
+  initialAvatarUrl,
   email,
   role,
 }: {
+  userId: string;
   initialName: string;
+  initialAvatarUrl: string | null;
   email: string;
   role: string;
 }) {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState(initialName);
+  const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -32,11 +41,66 @@ export default function ProfileForm({
     router.refresh();
   }
 
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setAvatarError(null);
+    setUploading(true);
+    const supabase = createClient();
+    const ext = file.name.split(".").pop();
+    const path = `${userId}/avatar.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(path, file, { upsert: true, cacheControl: "3600" });
+
+    if (uploadError) {
+      setUploading(false);
+      setAvatarError(
+        uploadError.message.includes("Bucket not found")
+          ? "O bucket 'avatars' ainda não existe no Supabase Storage."
+          : "Falha ao enviar a foto: " + uploadError.message
+      );
+      return;
+    }
+
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    const publicUrl = `${data.publicUrl}?t=${Date.now()}`;
+
+    await supabase.auth.updateUser({ data: { avatar_url: publicUrl } });
+    setAvatarUrl(publicUrl);
+    setUploading(false);
+    router.refresh();
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-navy-900 text-2xl font-bold text-white">
-        {name.charAt(0).toUpperCase() || "?"}
+      <div className="flex justify-center">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="group relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-navy-900 text-2xl font-bold text-white"
+        >
+          {avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
+          ) : (
+            name.charAt(0).toUpperCase() || "?"
+          )}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+            {uploading ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : <Camera className="h-5 w-5 text-white" />}
+          </div>
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleAvatarChange}
+        />
       </div>
+      {avatarError && <p className="text-center text-xs text-red-500">{avatarError}</p>}
 
       <div>
         <Label htmlFor="name">Nome completo</Label>

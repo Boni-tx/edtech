@@ -17,12 +17,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     (user.user_metadata?.full_name as string | undefined)?.split(" ")[0] ??
     user.email?.split("@")[0] ??
     "";
+  const avatarUrl = (user.user_metadata?.avatar_url as string | undefined) ?? null;
 
   return (
     <div className="flex h-screen overflow-hidden bg-canvas">
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Topbar name={name} />
+        <Topbar name={name} avatarUrl={avatarUrl} />
         <main className="flex-1 overflow-y-auto p-8">{children}</main>
       </div>
     </div>
