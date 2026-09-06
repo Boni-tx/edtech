@@ -3,15 +3,17 @@ import StarRating from "@/components/app/StarRating";
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
+  const professors = [...MOCK_PROFESSORS].sort((a, b) => b.rating - a.rating);
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-lg font-bold text-navy-900">Professores disponíveis agora</h2>
-        <span className="text-sm text-navy-300">{MOCK_PROFESSORS.length} professores</span>
+        <span className="text-sm text-navy-300">{professors.length} professores</span>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {MOCK_PROFESSORS.map((professor) => (
+        {professors.map((professor) => (
           <div
             key={professor.id}
             className="group overflow-hidden rounded-2xl border border-navy-900/8 bg-white shadow-card transition-shadow hover:shadow-card-hover"
