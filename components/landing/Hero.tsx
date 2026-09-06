@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Star, ShieldCheck } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import TiltCard from "./TiltCard";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 // MOCK — substituir por fetch do Supabase depois
 const mockSession = {
@@ -14,7 +15,7 @@ const mockSession = {
   time: "Hoje, 15h00",
 };
 
-export default function Hero() {
+export default function Hero({ dict }: { dict: Dictionary["landing"] }) {
   const router = useRouter();
 
   return (
@@ -35,7 +36,7 @@ export default function Hero() {
             className="mb-5 inline-flex items-center gap-2 rounded-full border border-navy-900/10 bg-white px-4 py-1.5 text-xs font-medium text-navy-500"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-confirm-500" />
-            Professores particulares disponíveis agora
+            {dict.badge}
           </motion.p>
 
           <motion.h1
@@ -44,11 +45,11 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.08 }}
             className="text-4xl font-bold leading-[1.08] tracking-tight text-navy-900 sm:text-5xl lg:text-6xl"
           >
-            Travou na matéria?
+            {dict.headline1}
             <br />
-            <span className="text-navy-500">Aula de reforço em minutos,</span>
+            <span className="text-navy-500">{dict.headline2}</span>
             <br />
-            não em semanas.
+            {dict.headline3}
           </motion.h1>
 
           <motion.p
@@ -57,9 +58,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.16 }}
             className="mt-6 max-w-md text-lg leading-relaxed text-navy-500"
           >
-            Encontre um professor particular por matéria, pague com
-            segurança e entre direto na aula por vídeo. Sem pacote mensal,
-            sem enrolação.
+            {dict.subheadline}
           </motion.p>
 
           <motion.div
@@ -72,13 +71,13 @@ export default function Hero() {
               variant="primary"
               onClick={() => router.push("/login?tab=signup&role=aluno")}
             >
-              Encontrar um professor
+              {dict.ctaFindTutor}
             </MagneticButton>
             <MagneticButton
               variant="secondary"
               onClick={() => router.push("/login?tab=signup&role=professor")}
             >
-              Quero dar aulas
+              {dict.ctaTeach}
             </MagneticButton>
           </motion.div>
 
@@ -89,7 +88,7 @@ export default function Hero() {
             className="mt-10 flex items-center gap-2 text-sm text-navy-500"
           >
             <ShieldCheck className="h-4 w-4 text-confirm-600" />
-            Pagamento protegido até o fim da aula
+            {dict.paymentProtected}
           </motion.div>
         </div>
 
@@ -104,7 +103,7 @@ export default function Hero() {
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-confirm-500/10 px-3 py-1 text-xs font-semibold text-confirm-600">
                   <span className="h-1.5 w-1.5 rounded-full bg-confirm-500" />
-                  Aula confirmada
+                  {dict.mockConfirmed}
                 </span>
                 <BookOpen className="h-5 w-5 text-navy-300" />
               </div>
@@ -130,7 +129,7 @@ export default function Hero() {
                   </div>
                 </div>
                 <span className="text-xs font-medium text-navy-500">
-                  Sala pronta
+                  {dict.mockRoomReady}
                 </span>
               </div>
             </TiltCard>
@@ -142,7 +141,7 @@ export default function Hero() {
             transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
             className="absolute -left-6 -bottom-6 hidden rounded-xl border border-navy-900/8 bg-white px-4 py-3 shadow-card sm:block"
           >
-            <p className="text-xs text-navy-500">Pagamento retido</p>
+            <p className="text-xs text-navy-500">{dict.mockHeldPayment}</p>
             <p className="text-sm font-semibold text-navy-900">R$ 50,00</p>
           </motion.div>
         </div>

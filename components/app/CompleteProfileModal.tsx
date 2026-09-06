@@ -3,8 +3,15 @@
 import { useState } from "react";
 import { ClipboardList, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export default function CompleteProfileModal({ show }: { show: boolean }) {
+export default function CompleteProfileModal({
+  show,
+  dict,
+}: {
+  show: boolean;
+  dict: Dictionary["professional"];
+}) {
   const [dismissed, setDismissed] = useState(false);
 
   if (!show || dismissed) return null;
@@ -35,18 +42,15 @@ export default function CompleteProfileModal({ show }: { show: boolean }) {
           <ClipboardList className="h-7 w-7 text-navy-900 dark:text-white" />
         </div>
 
-        <h2 className="text-lg font-bold text-navy-900 dark:text-white">Complete seu perfil profissional</h2>
-        <p className="mt-2 text-sm text-navy-500 dark:text-navy-300">
-          Professores com perfil completo (CPF, endereço, dados bancários e verificação) aparecem
-          mais nas buscas e passam mais confiança pros alunos.
-        </p>
+        <h2 className="text-lg font-bold text-navy-900 dark:text-white">{dict.modalTitle}</h2>
+        <p className="mt-2 text-sm text-navy-500 dark:text-navy-300">{dict.modalDescription}</p>
 
         <div className="mt-6 flex flex-col gap-2.5">
           <Button size="lg" className="w-full" onClick={goToForm}>
-            Completar perfil
+            {dict.modalCta}
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setDismissed(true)}>
-            Agora não
+            {dict.modalLater}
           </Button>
         </div>
       </div>

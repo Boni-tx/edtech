@@ -21,7 +21,17 @@ type Initial = {
   diplomaUrl: string;
 };
 
-export default function PublishProfileForm({ userId, initial }: { userId: string; initial: Initial }) {
+export default function PublishProfileForm({
+  userId,
+  initial,
+  postalCodeLabel,
+  phoneLabel,
+}: {
+  userId: string;
+  initial: Initial;
+  postalCodeLabel: string;
+  phoneLabel: string;
+}) {
   const router = useRouter();
   const photoInputRef = useRef<HTMLInputElement>(null);
   const diplomaInputRef = useRef<HTMLInputElement>(null);
@@ -224,7 +234,7 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
       </div>
 
       <div>
-        <Label htmlFor="pub-cep">CEP</Label>
+        <Label htmlFor="pub-cep">{postalCodeLabel}</Label>
         <Input
           id="pub-cep"
           placeholder="00000-000"
@@ -234,7 +244,7 @@ export default function PublishProfileForm({ userId, initial }: { userId: string
       </div>
 
       <div>
-        <Label htmlFor="pub-telefone">Telefone</Label>
+        <Label htmlFor="pub-telefone">{phoneLabel}</Label>
         <Input
           id="pub-telefone"
           placeholder="(00) 00000-0000"

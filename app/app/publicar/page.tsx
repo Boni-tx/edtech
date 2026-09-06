@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getServerDictionary } from "@/lib/i18n/server";
 import PublishProfileForm from "./publish-profile-form";
 
 export default async function PublicarPage() {
@@ -24,6 +25,7 @@ export default async function PublicarPage() {
     .maybeSingle();
 
   const meta = user.user_metadata ?? {};
+  const { dict } = getServerDictionary();
 
   return (
     <div className="mx-auto max-w-lg">
@@ -37,6 +39,8 @@ export default async function PublicarPage() {
 
       <PublishProfileForm
         userId={user.id}
+        postalCodeLabel={dict.professional.postalCodeLabel}
+        phoneLabel={dict.professional.phoneLabel}
         initial={{
           name: existing?.name ?? (meta.full_name as string | undefined) ?? "",
           subject: existing?.subject ?? "",

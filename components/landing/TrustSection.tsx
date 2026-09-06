@@ -2,28 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Lock, Users, Flag } from "lucide-react";
-
-// MOCK — substituir por números reais vindos do Supabase quando disponíveis
-const mockStats = [
-  {
-    icon: Lock,
-    title: "Pagamento protegido",
-    description:
-      "O valor da aula fica retido na plataforma e só é repassado ao professor após a conclusão.",
-  },
-  {
-    icon: Users,
-    title: "Avaliado pela comunidade",
-    description:
-      "Professores são avaliados por estrelas a cada aula — sem exigência prévia de diploma.",
-  },
-  {
-    icon: Flag,
-    title: "Garantia de estorno",
-    description:
-      "Problema com a aula? Você tem 24h para denunciar e receber 100% do valor de volta.",
-  },
-];
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const container = {
   hidden: {},
@@ -35,7 +14,13 @@ const item = {
   show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5 } },
 };
 
-export default function TrustSection() {
+export default function TrustSection({ dict }: { dict: Dictionary["landing"] }) {
+  const mockStats = [
+    { icon: Lock, title: dict.trustPaymentTitle, description: dict.trustPaymentDescription },
+    { icon: Users, title: dict.trustReviewsTitle, description: dict.trustReviewsDescription },
+    { icon: Flag, title: dict.trustRefundTitle, description: dict.trustRefundDescription },
+  ];
+
   return (
     <section className="px-6 py-24 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -47,12 +32,9 @@ export default function TrustSection() {
           className="mx-auto mb-14 max-w-xl text-center"
         >
           <h2 className="text-3xl font-bold tracking-tight text-navy-900 sm:text-4xl">
-            Segurança em cada etapa
+            {dict.trustTitle}
           </h2>
-          <p className="mt-3 text-navy-500">
-            Pensado para que aluno e professor confiem na plataforma, não só
-            um no outro.
-          </p>
+          <p className="mt-3 text-navy-500">{dict.trustSubtitle}</p>
         </motion.div>
 
         <motion.div

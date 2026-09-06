@@ -3,31 +3,7 @@
 import { motion } from "framer-motion";
 import { Search, ShieldCheck, Video } from "lucide-react";
 import TiltCard from "./TiltCard";
-
-// MOCK — conteúdo estático por enquanto, sem dependência de backend
-const steps = [
-  {
-    number: "1",
-    icon: Search,
-    title: "Busque a matéria",
-    description:
-      "Digite a disciplina — Química, Matemática, História — e veja professores disponíveis com nota e preço por hora.",
-  },
-  {
-    number: "2",
-    icon: ShieldCheck,
-    title: "Agende e pague seguro",
-    description:
-      "O valor fica retido na plataforma (escrow) e só é liberado ao professor depois que a aula acontece.",
-  },
-  {
-    number: "3",
-    icon: Video,
-    title: "Aprenda na sala de vídeo",
-    description:
-      "Entre na videochamada integrada, sem precisar instalar nada ou sair do site.",
-  },
-];
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const container = {
   hidden: {},
@@ -39,7 +15,13 @@ const item = {
   show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5 } },
 };
 
-export default function HowItWorks() {
+export default function HowItWorks({ dict }: { dict: Dictionary["landing"] }) {
+  const steps = [
+    { number: "1", icon: Search, title: dict.step1Title, description: dict.step1Description },
+    { number: "2", icon: ShieldCheck, title: dict.step2Title, description: dict.step2Description },
+    { number: "3", icon: Video, title: dict.step3Title, description: dict.step3Description },
+  ];
+
   return (
     <section className="bg-navy-50/40 px-6 py-24 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -51,11 +33,9 @@ export default function HowItWorks() {
           className="mx-auto mb-14 max-w-xl text-center"
         >
           <h2 className="text-3xl font-bold tracking-tight text-navy-900 sm:text-4xl">
-            Como funciona
+            {dict.howItWorksTitle}
           </h2>
-          <p className="mt-3 text-navy-500">
-            Da dúvida à aula, em três passos — sem burocracia.
-          </p>
+          <p className="mt-3 text-navy-500">{dict.howItWorksSubtitle}</p>
         </motion.div>
 
         <motion.div

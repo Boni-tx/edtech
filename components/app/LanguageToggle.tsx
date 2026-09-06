@@ -13,7 +13,7 @@ export default function LanguageToggle({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="inline-flex rounded-full border border-navy-900/12 p-1 dark:border-white/10">
+    <div className="inline-flex rounded-full border border-navy-900/12 bg-white p-1 shadow-card dark:border-white/10 dark:bg-navy-800">
       <button
         type="button"
         onClick={() => setLocale("pt")}

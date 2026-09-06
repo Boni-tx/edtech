@@ -1,13 +1,14 @@
-// MOCK — links serão apontados para rotas reais quando existirem
-const links = [
-  { label: "Sobre", href: "#" },
-  { label: "Termos de Uso", href: "#" },
-  { label: "Privacidade", href: "#" },
-  { label: "Contato", href: "#" },
-  { label: "Trabalhe Conosco (Professores)", href: "#" },
-];
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export default function Footer() {
+export default function Footer({ dict }: { dict: Dictionary["landing"] }) {
+  const links = [
+    { label: dict.footerAbout, href: "#" },
+    { label: dict.footerTerms, href: "#" },
+    { label: dict.footerPrivacy, href: "#" },
+    { label: dict.footerContact, href: "#" },
+    { label: dict.footerWorkWithUs, href: "#" },
+  ];
+
   return (
     <footer className="border-t border-navy-900/8 px-6 py-10 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
@@ -28,8 +29,7 @@ export default function Footer() {
         </nav>
 
         <p className="text-xs text-navy-300">
-          &copy; {new Date().getFullYear()} EdTech Marketplace. Todos os
-          direitos reservados.
+          &copy; {new Date().getFullYear()} EdTech Marketplace. {dict.footerRights}
         </p>
       </div>
     </footer>

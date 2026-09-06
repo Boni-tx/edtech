@@ -27,7 +27,7 @@ export default async function PerfilPage() {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <CompleteProfileModal show={needsProfessorProfile} />
+      <CompleteProfileModal show={needsProfessorProfile} dict={dict.professional} />
       <h2 className="text-lg font-bold text-navy-900 dark:text-white">{dict.perfil.title}</h2>
 
       <div className="rounded-2xl border border-navy-900/8 bg-white p-6 shadow-card dark:border-white/10 dark:bg-navy-900">
@@ -60,6 +60,7 @@ export default async function PerfilPage() {
 
       {role === "professor" && (
         <ProfessionalDetailsForm
+          dict={dict.professional}
           initial={{
             cpf: (meta.cpf as string | undefined) ?? "",
             cep: (meta.cep as string | undefined) ?? "",
